@@ -9,22 +9,14 @@ module Enumerable
 		end		
 	end
 
-	def my_each_with_index(&block)
-		if block.nil?
-			return self
-		end
-
+	def my_each_with_index
 		last_index = self.length - 1
 		for i in 0..last_index
 			yield(self[i],i)
 		end
 	end
 
-	def my_select(&block)
-		if block.nil?
-			return self
-		end
-
+	def my_select
 		outarr = []
 		self.my_each do |item| 
 			outarr << item if yield(item)
@@ -32,36 +24,28 @@ module Enumerable
 		outarr
 	end
 
-	def my_all?(&block)
+	def my_all?
 		result = true
-		if block.nil?
-			self.my_each do |item|
-				result = false if item.nil? or !item
-			end
-		else
-		    self.my_each do |item|
-			    result = false if !yield(item)
-		    end
+		self.my_each do |item|
+			result = false if !yield(item)
 		end
 		result
 	end
 
-	def my_any?(&block)
+	def my_any?
 		result = false
-		if block.nil?
-			self.my_each do |item|
-				result = true if !item.nil? and item
-			end
-		else
-	 	    self.my_each do |item|
-			    result = true if yield(item)
-		    end
-	    end
+		self.my_each do |item|
+			result = true if yield(item)
+		end
 		result
 	end
 
-	def my_none?(&block)
-		result = !(self.my_any?(&block))
+	def my_none?
+		result = false
+		self.my_each do |item|
+			result = true if yield(item)
+		end
+		!result
 	end
 
 	def my_count(value=nil, &block)
